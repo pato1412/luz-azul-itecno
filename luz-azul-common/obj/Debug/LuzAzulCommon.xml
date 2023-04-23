@@ -1,0 +1,45 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+LuzAzulCommon
+</name>
+</assembly>
+<members>
+<member name="T:LAFunctions.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:LAFunctions.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:LAFunctions.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="M:LAFunctions.LuzAzulCommon.EnviarMail(System.Collections.Generic.List{System.String},System.String,System.String,System.Collections.Generic.List{System.String})">
+ <summary>
+ Envia un mail con los parametros informados.
+ </summary>
+ <param name="ListEnviarA">Lista de Emails a donde se quiere enviar</param>
+ <param name="Asunto">Descripcion corta del contenido del Email</param>
+ <param name="Cuerpo">Contenido detallado del Email</param>
+ <param name="ListAdjuntos">Lista de rutas absolutas de los archivos a adjuntar</param>
+ <return>Devulve True en caso de exito.</return>
+</member>
+<member name="M:LAFunctions.LuzAzulEmision.GetSaldoCtaCte(System.String,System.Int64,System.String)">
+ <summary>
+ Obtiene el Saldo en Cta Cte de un cliente.
+ </summary>
+ <param name="clienteId">Codigo del cliente</param>
+ <param name="monedaId">Codigo de la moneda en que se esta evaluando el saldo</param>
+ <param name="docIdSel">Lista separada por (,) de los REMs o FCs seleccionados que no se tienen que tomar en cuenta para el control crediticio</param>
+ <return>Devulve el importe en cuenta corriente del clienteen caso de exito y 0 en caso de error.</return>
+</member>
+</members>
+</doc>

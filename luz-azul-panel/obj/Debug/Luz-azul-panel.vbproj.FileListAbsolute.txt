@@ -1,0 +1,62 @@
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Gestion.exe.config
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Gestion.exe
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Gestion.pdb
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Gestion.xml
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Compras.exe
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Configuracion.exe
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Emision Doc.exe
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Pedidos.exe
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Recepcion Pedidos.exe
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\LuzAzulCommon.dll
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Newtonsoft.Json.dll
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\LuzAzulCommon.pdb
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\LuzAzulCommon.xml
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Compras.pdb
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Compras.xml
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Compras.exe.config
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Configuracion.pdb
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Configuracion.xml
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Configuracion.exe.config
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Emision Doc.pdb
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Emision Doc.xml
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Emision Doc.exe.config
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Pedidos.pdb
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Pedidos.xml
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Pedidos.exe.config
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Recepcion Pedidos.pdb
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Recepcion Pedidos.xml
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\bin\Debug\Luz Azul Recepcion Pedidos.exe.config
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\luz-azul-panel.vbprojAssemblyReference.cache
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmEstablecimientos.resources
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmEstablecimientosMultiple.resources
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmLogin.resources
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\Luz_Azul_MDI.MDIParent1.resources
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\Luz_Azul_MDI.Resources.resources
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\luz-azul-panel.vbproj.GenerateResource.cache
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\luz-azul-panel.vbproj.CoreCompileInputs.cache
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\luz-azul-panel.vbproj.CopyComplete
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\Luz Azul Gestion.exe
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\Luz Azul Gestion.xml
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\Luz Azul Gestion.pdb
+C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmDepositos.resources
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\luz-azul-panel.vbprojAssemblyReference.cache
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmDepositos.resources
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmEstablecimientos.resources
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmEstablecimientosMultiple.resources
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmLogin.resources
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz_Azul_MDI.MDIParent1.resources
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz_Azul_MDI.Resources.resources
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\luz-azul-panel.vbproj.GenerateResource.cache
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\luz-azul-panel.vbproj.CoreCompileInputs.cache
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz Azul Gestion.exe
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz Azul Gestion.xml
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz Azul Gestion.pdb
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\bin\Debug\Luz Azul Gestion.exe.config
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\bin\Debug\Luz Azul Gestion.exe
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\bin\Debug\Luz Azul Gestion.pdb
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\bin\Debug\Luz Azul Gestion.xml
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\bin\Debug\LuzAzulCommon.dll
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\bin\Debug\Newtonsoft.Json.dll
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\bin\Debug\LuzAzulCommon.pdb
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\bin\Debug\LuzAzulCommon.xml
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\luz-azul-panel.vbproj.CopyComplete
