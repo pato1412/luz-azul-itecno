@@ -31,3 +31,4 @@ C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-common\obj\Debug\luz-azul-c
 C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-common\obj\Debug\LuzAzulCommon.dll
 C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-common\obj\Debug\LuzAzulCommon.xml
 C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-common\obj\Debug\LuzAzulCommon.pdb
+C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-common\obj\Debug\luz-azul-common.vbprojAssemblyReference.cache

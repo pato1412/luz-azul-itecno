@@ -35,10 +35,9 @@ Public Class ComboItem
 End Class
 
 Public Class LuzAzulCommon
-    Private myConn As SqlConnection
-    Private myCmd As SqlCommand
-    Private myReader As SqlDataReader
-
+    Public myConn As SqlConnection
+    Public myCmd As SqlCommand
+    Public myReader As SqlDataReader
 
     Public conn As Conexion = New Conexion
     Public rs As RegSet = New RegSet
@@ -66,29 +65,14 @@ Public Class LuzAzulCommon
 
             myConn.Open()
 
-            Dim Query As String = "SELECT * from [Usuarios]"
-
-            myCmd = New SqlCommand(Query, myConn)
-
-            myReader = myCmd.ExecuteReader()
-
-            While myReader.Read()
-                'MsgBox(myReader.GetValue(1).ToString())
-                MsgBox(myReader.GetValue(myReader.GetOrdinal("Nombre")))
-            End While
-
-            myConn.Close()
-
-            conn.Abrir(cxTipoBase.cxEmpresa)
-            rs.Conection = conn.RegSet.Conection
-            NombreBase = conn.Base.ToString()
         Catch ex As Exception
             MsgBox("Error al establecer la conexion a la base de datos", vbOKOnly, TitulosMensaje)
         End Try
 
         Try
+
             ' Intento setear los parametros de Email
-            SetEntidadesMailings()
+            'SetEntidadesMailings()
         Catch ex As Exception
             MsgBox("Error al setear los parametros del mail", vbOKOnly, TitulosMensaje)
         End Try
@@ -101,18 +85,13 @@ Public Class LuzAzulCommon
 & "Pwd=UpWAXosx(b;" _
 & "Connection Timeout=30;"
     End Function
-    Private Function GetSqlServerConnectionString2() As String
-        GetSqlServerConnectionString2 = "Driver={SQL Server Native Client 11.0};" _
-& "Server=tcp:luzazul.cfm2g7bbnqws.us-east-2.rds.amazonaws.com,1433;" _
-& "Database=LuzAzulBD;" _
-& "Uid=admin;" _
-& "Pwd={UpWAXosx(b};" _
-& "Encrypt=yes;" _
-& "Connection Timeout=30;"
-    End Function
 
     Protected Overrides Sub Finalize()
-        conn.Cerrar()
+        'Cuando se finaliza el objeto se cierran todas las conexiones
+        'If myConn.State Then
+        'myConn.Close()
+        'End If
+
         MyBase.Finalize()
     End Sub
     '---- SECCION PARA DECLARAR LAS CLASES DE RESPUESTA ----
@@ -1170,21 +1149,24 @@ Public Class LuzAzulCommon
                     FROM " + NombreBaseEnsemble + ".dbo.[GWRConfiguracion]  
                     WHERE Parametro = '" + NombreParametro + "'"
 
-            rs.Source = sqlQuery
-            Query.Add(sqlQuery)
-            rs.Abrir()
-            If Not rs.EOF Then
-                Do While Not rs.EOF
-                    respuesta.Tipo = rs("Tipo").Valor
-                    respuesta.Parametro = rs("Parametro").Valor
-                    respuesta.Valor = rs("Valor").Valor
-                    rs.MoveNext()
+
+            myCmd = New SqlCommand(sqlQuery, myConn)
+
+            myReader = myCmd.ExecuteReader()
+            If myReader.HasRows Then
+                Do While myReader.Read()
+                    'MsgBox(myReader.GetValue(myReader.GetOrdinal("Nombre")))
+                    respuesta.Tipo = myReader.GetValue(myReader.GetOrdinal("Tipo"))
+                    respuesta.Parametro = myReader.GetValue(myReader.GetOrdinal("Parametro"))
+                    respuesta.Valor = myReader.GetValue(myReader.GetOrdinal("Valor"))
+
                 Loop
                 respuesta.ConsultaExitosa = True
             Else
                 respuesta.mensaje = "No existe el parametro de configuracion"
             End If
-            rs.Cerrar()
+
+            myReader.Close()
         Catch ex As Exception
             respuesta.mensaje = "Error BD consultando el parametro de configuracion"
         End Try

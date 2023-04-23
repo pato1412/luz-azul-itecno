@@ -25,10 +25,10 @@ Public Class Controlador
         Dim respuesta As ResponseCuit = fachadaBD.GetCUITEmpresa()
         If respuesta.ConsultaExitosa Then
             CUIT = respuesta.CUIT
-            EsFabrica = (respuesta.CUIT = MDI_GlobalSettings.CUITEnsemble)
+            EsFabrica = (respuesta.CUIT = LAFunctions.GlobalSetting.CUITEnsemble)
         Else
             WriteLogFile("La funcion verificar fabrica ha dado error")
-            MsgBox(respuesta.mensaje, vbExclamation + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+            MsgBox(respuesta.mensaje, vbExclamation + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
         End If
 
         ' Obtengo las configuraciones de envio de mails
@@ -36,12 +36,12 @@ Public Class Controlador
         Dim respuestaEntidades As ResponseEntidades = fachadaBD.LeerEntidadesMailings()
         If respuestaEntidades.ConsultaExitosa = True Then
             'si la configuraciones estan cargadas sobreescribo las que vienen por default
-            MDI_GlobalSettings.SMTP = respuestaEntidades.SMTPServer
-            MDI_GlobalSettings.MailPort = respuestaEntidades.Puerto
-            MDI_GlobalSettings.MailFromAddress = respuestaEntidades.Email
-            MDI_GlobalSettings.MailUsername = respuestaEntidades.UID
-            MDI_GlobalSettings.MailPassword = respuestaEntidades.PWD
-            MDI_GlobalSettings.MailEnableSSL = respuestaEntidades.UsaSSL
+            LAFunctions.GlobalSetting.SMTP = respuestaEntidades.SMTPServer
+            LAFunctions.GlobalSetting.MailPort = respuestaEntidades.Puerto
+            LAFunctions.GlobalSetting.MailFromAddress = respuestaEntidades.Email
+            LAFunctions.GlobalSetting.MailUsername = respuestaEntidades.UID
+            LAFunctions.GlobalSetting.MailPassword = respuestaEntidades.PWD
+            LAFunctions.GlobalSetting.MailEnableSSL = respuestaEntidades.UsaSSL
         End If
 
         LogEvent.Add("GetRazonSocial()")
@@ -50,7 +50,7 @@ Public Class Controlador
             RazonSocial = RespuestaRazonSocial.RazonSocial
         Else
             WriteLogFile("La funcion Get Razon social ha dado error")
-            MsgBox(respuesta.mensaje, vbExclamation + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+            MsgBox(respuesta.mensaje, vbExclamation + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
         End If
 
 
@@ -58,7 +58,7 @@ Public Class Controlador
 
     Public Shared Function GetInstancia() As Controlador
         If (instancia Is Nothing) Then
-            fachadaBD = New LAFunctions.LuzAzulCommon With {.NombreBaseEnsemble = MDI_GlobalSettings.NombreBaseEnsemble}
+            fachadaBD = New LAFunctions.LuzAzulCommon With {.NombreBaseEnsemble = LAFunctions.GlobalSetting.NombreBaseEnsemble}
             instancia = New Controlador()
         End If
 
@@ -142,7 +142,7 @@ Public Class Controlador
         If (respuestaDepositos.ConsultaExitosa = False) Then
             ' Si ocurrio un error con el listado de depositos lo muestro en pantalla
             WriteLogFile("Ocurrio un error con los depositos del usuario")
-            MsgBox(respuestaDepositos.mensaje, vbExclamation + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+            MsgBox(respuestaDepositos.mensaje, vbExclamation + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
         Else
             ListDepositos = respuestaDepositos.rs
         End If
@@ -183,13 +183,13 @@ Public Class Controlador
 
             'Escribo todos las configuraciones globales para poder ubicar el error
             sw.WriteLine("--------------- Configuration -----------------")
-            sw.WriteLine("CUITEnsemble: " + MDI_GlobalSettings.CUITEnsemble)
-            sw.WriteLine("NombreBaseEnsemble: " + MDI_GlobalSettings.NombreBaseEnsemble)
-            sw.WriteLine("SMTP: " + MDI_GlobalSettings.SMTP)
-            sw.WriteLine("MailFromAddress: " + MDI_GlobalSettings.MailFromAddress)
-            sw.WriteLine("MailUsername: " + MDI_GlobalSettings.MailUsername)
-            sw.WriteLine("MailEnableSSL: " + MDI_GlobalSettings.MailEnableSSL.ToString())
-            sw.WriteLine("MailPort: " + MDI_GlobalSettings.MailPort.ToString())
+            sw.WriteLine("CUITEnsemble: " + LAFunctions.GlobalSetting.CUITEnsemble)
+            sw.WriteLine("NombreBaseEnsemble: " + LAFunctions.GlobalSetting.NombreBaseEnsemble)
+            sw.WriteLine("SMTP: " + LAFunctions.GlobalSetting.SMTP)
+            sw.WriteLine("MailFromAddress: " + LAFunctions.GlobalSetting.MailFromAddress)
+            sw.WriteLine("MailUsername: " + LAFunctions.GlobalSetting.MailUsername)
+            sw.WriteLine("MailEnableSSL: " + LAFunctions.GlobalSetting.MailEnableSSL.ToString())
+            sw.WriteLine("MailPort: " + LAFunctions.GlobalSetting.MailPort.ToString())
             sw.WriteLine("")
 
 

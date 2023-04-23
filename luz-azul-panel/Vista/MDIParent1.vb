@@ -73,25 +73,25 @@ Public Class MDIParent1
     Private Sub HideMenuElement()
         Dim AppPath As String
         'verifico si existe el ejecutable de pedidos
-        AppPath = My.Application.Info.DirectoryPath + "\" + MDI_GlobalSettings.NombreAppPedidos
+        AppPath = My.Application.Info.DirectoryPath + "\" + LAFunctions.GlobalSetting.NombreAppPedidos
         If (My.Computer.FileSystem.FileExists(AppPath) = False) Then
             EnviarPedidosToolStripMenuItem.Visible = False
         End If
 
         'verifico si existe el ejecutable de configuracion
-        AppPath = My.Application.Info.DirectoryPath + "\" + MDI_GlobalSettings.NombreAppConfiguracion
+        AppPath = My.Application.Info.DirectoryPath + "\" + LAFunctions.GlobalSetting.NombreAppConfiguracion
         If (My.Computer.FileSystem.FileExists(AppPath) = False) Then
             ConfiguracionesToolStripMenuItem.Visible = False
         End If
 
         'verifico si existe el ejecutable de emision docs
-        AppPath = My.Application.Info.DirectoryPath + "\" + MDI_GlobalSettings.NombreAppEmisionDocumentos
+        AppPath = My.Application.Info.DirectoryPath + "\" + LAFunctions.GlobalSetting.NombreAppEmisionDocumentos
         If (My.Computer.FileSystem.FileExists(AppPath) = False) Then
             FacturacionAutomaticaToolStripMenuItem.Visible = False
         End If
 
         'verifico si existe el ejecutable de recepcion de pedidos
-        AppPath = My.Application.Info.DirectoryPath + "\" + MDI_GlobalSettings.NombreAppRecepcionPedidos
+        AppPath = My.Application.Info.DirectoryPath + "\" + LAFunctions.GlobalSetting.NombreAppRecepcionPedidos
         If (My.Computer.FileSystem.FileExists(AppPath) = False) Then
             RecepcionPedidosToolStripMenuItem.Visible = False
         End If
@@ -129,7 +129,7 @@ Public Class MDIParent1
             'verifico que no este abierto el aplicativo de pedidos de una franquicia
             For Each frm As Form In Application.OpenForms
                 If frm.Name = "frmClientes" Or frm.Name = "frmMain" Then
-                    MsgBox("No puedes enviar un pedido de franquicias si tienes abierto el aplicativos de clientes", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, MDI_GlobalSettings.TituloMensajes)
+                    MsgBox("No puedes enviar un pedido de franquicias si tienes abierto el aplicativos de clientes", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, LAFunctions.GlobalSetting.TituloMensajes)
                     Exit Sub
                 End If
             Next
@@ -149,14 +149,14 @@ Public Class MDIParent1
             Else
                 'Ocurrio un error al obtener el o los establecimientos
                 Controlador.WriteLogFile("Ocurrio un error al obtener el o los establecimientos")
-                MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+                MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
             End If
 
 
         Catch ex As Exception
             'Ocurrio un error al obtener el o los establecimientos
-            Controlador.WriteLogFile("Error al leer el ejecutable de la aplicacion: " + MDI_GlobalSettings.NombreAppPedidos + " - " + ex.Message)
-            MsgBox("Ocurrio un error al leer la aplicacion de pedidos " + vbCrLf + MDI_GlobalSettings.NombreAppPedidos, vbCritical + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+            Controlador.WriteLogFile("Error al leer el ejecutable de la aplicacion: " + LAFunctions.GlobalSetting.NombreAppPedidos + " - " + ex.Message)
+            MsgBox("Ocurrio un error al leer la aplicacion de pedidos " + vbCrLf + LAFunctions.GlobalSetting.NombreAppPedidos, vbCritical + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
         End Try
     End Sub
     Private Sub SetGlobalSettingsToPedidos()
@@ -194,7 +194,7 @@ Public Class MDIParent1
             'Dim frmRecepcion As New Luz_Azul_Recepcion_Pedidos.frmMainRecepcion
             'frmRecepcion.Show()
         Else
-            MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+            MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
         End If
 
     End Sub
@@ -254,7 +254,7 @@ Public Class MDIParent1
             'Dim frmEmisionDoc = New luz_azul_emision_doc.frmEmisionDoc
             'frmEmisionDoc.Show()
         Else
-            MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+            MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
         End If
     End Sub
 
@@ -356,17 +356,17 @@ Public Class MDIParent1
             End_Excel_App(datestart, Date.Now) ' This closes excel proces
 
             Me.Cursor = Cursors.Default
-            MsgBox("El archivo excel ha sido generado con exito " + vbCrLf + ExcelFilename, MsgBoxStyle.Information, MDI_GlobalSettings.TituloMensajes)
+            MsgBox("El archivo excel ha sido generado con exito " + vbCrLf + ExcelFilename, MsgBoxStyle.Information, LAFunctions.GlobalSetting.TituloMensajes)
         Catch es As UnauthorizedAccessException
             Me.Cursor = Cursors.Default
-            MsgBox("No tienes permiso " + vbCrLf + es.Message, MsgBoxStyle.Critical, MDI_GlobalSettings.TituloMensajes)
+            MsgBox("No tienes permiso " + vbCrLf + es.Message, MsgBoxStyle.Critical, LAFunctions.GlobalSetting.TituloMensajes)
             Dim strError As String = "GenerarArchivosExcel Error No tienes permisos - Message: " + es.Message + vbCrLf + JsonConvert.SerializeObject(es)
             Controlador.WriteLogFile(strError)
 
             End_Excel_App(datestart, Date.Now) ' This closes excel proces
         Catch ex As Exception
             Me.Cursor = Cursors.Default
-            MsgBox("Ocurrio un error al generar el archivo excel " + vbCrLf + ex.Message, MsgBoxStyle.Critical, MDI_GlobalSettings.TituloMensajes)
+            MsgBox("Ocurrio un error al generar el archivo excel " + vbCrLf + ex.Message, MsgBoxStyle.Critical, LAFunctions.GlobalSetting.TituloMensajes)
             'Si el excel no tiene licencia cuando quiere cerrar la app tira un error, por eso debo continuar igual
             Dim strError As String = "GenerarArchivosExcel Error al cerrar al aplicacion - Message: " + ex.Message + vbCrLf + JsonConvert.SerializeObject(ex)
             Controlador.WriteLogFile(strError)
@@ -435,16 +435,16 @@ Public Class MDIParent1
             End Using
 
             Me.Cursor = Cursors.Default
-            MsgBox("El archivo TXT ha sido generado con exito" + vbCrLf + myFilePath, MsgBoxStyle.Information, MDI_GlobalSettings.TituloMensajes)
+            MsgBox("El archivo TXT ha sido generado con exito" + vbCrLf + myFilePath, MsgBoxStyle.Information, LAFunctions.GlobalSetting.TituloMensajes)
         Catch es As UnauthorizedAccessException
             Me.Cursor = Cursors.Default
-            MsgBox("No tienes permiso " + vbCrLf + es.Message, MsgBoxStyle.Critical, MDI_GlobalSettings.TituloMensajes)
+            MsgBox("No tienes permiso " + vbCrLf + es.Message, MsgBoxStyle.Critical, LAFunctions.GlobalSetting.TituloMensajes)
             Dim strError As String = "GenerarArchivosExcel Error No tienes permisos - Message: " + es.Message + vbCrLf + JsonConvert.SerializeObject(es)
             Controlador.WriteLogFile(strError)
 
         Catch ex As Exception
             Me.Cursor = Cursors.Default
-            MsgBox("Ocurrio un error al generar el archivo excel " + vbCrLf + ex.Message, MsgBoxStyle.Critical, MDI_GlobalSettings.TituloMensajes)
+            MsgBox("Ocurrio un error al generar el archivo excel " + vbCrLf + ex.Message, MsgBoxStyle.Critical, LAFunctions.GlobalSetting.TituloMensajes)
             'Si el excel no tiene licencia cuando quiere cerrar la app tira un error, por eso debo continuar igual
             Dim strError As String = "GenerarArchivosExcel Error al cerrar al aplicacion - Message: " + ex.Message + vbCrLf + JsonConvert.SerializeObject(ex)
             Controlador.WriteLogFile(strError)
@@ -460,7 +460,7 @@ Public Class MDIParent1
             'verifico que no este abierto el aplicativo de pedidos de una franquicia
             For Each frm As Form In Application.OpenForms
                 If frm.Name = "frmClasificaciones" Or frm.Name = "frmMain" Then
-                    MsgBox("No puedes enviar un pedido de cliente si tienes abierto el aplicativos de franquicias", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, MDI_GlobalSettings.TituloMensajes)
+                    MsgBox("No puedes enviar un pedido de cliente si tienes abierto el aplicativos de franquicias", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, LAFunctions.GlobalSetting.TituloMensajes)
                     Exit Sub
                 End If
             Next
@@ -478,13 +478,13 @@ Public Class MDIParent1
                 'Dim frmClientes = New luz_azul_pedidos.frmClientes
                 'frmClientes.Show()
             Else
-                MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+                MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
             End If
 
         Catch ex As Exception
             'Ocurrio un error al obtener el o los establecimientos
-            Controlador.WriteLogFile("Error al leer el ejecutable de la aplicacion: " + MDI_GlobalSettings.NombreAppPedidos + " - " + ex.Message)
-            MsgBox("Ocurrio un error al leer la aplicacion de pedidos " + vbCrLf + MDI_GlobalSettings.NombreAppPedidos, vbCritical + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+            Controlador.WriteLogFile("Error al leer el ejecutable de la aplicacion: " + LAFunctions.GlobalSetting.NombreAppPedidos + " - " + ex.Message)
+            MsgBox("Ocurrio un error al leer la aplicacion de pedidos " + vbCrLf + LAFunctions.GlobalSetting.NombreAppPedidos, vbCritical + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
         End Try
 
     End Sub
@@ -512,12 +512,12 @@ Public Class MDIParent1
                 'Dim frmRecepcion = New luz_azul_compras.frmRecepcionFC
                 'frmRecepcion.Show()
             Else
-                MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+                MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
             End If
         Catch ex As Exception
             'Ocurrio un error al obtener el o los establecimientos
-            Controlador.WriteLogFile("Error al leer el ejecutable de la aplicacion: " + MDI_GlobalSettings.NombreAppCompras + " - " + ex.Message)
-            MsgBox("Ocurrio un error al leer la aplicacion de Compras " + vbCrLf + MDI_GlobalSettings.NombreAppCompras, vbCritical + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+            Controlador.WriteLogFile("Error al leer el ejecutable de la aplicacion: " + LAFunctions.GlobalSetting.NombreAppCompras + " - " + ex.Message)
+            MsgBox("Ocurrio un error al leer la aplicacion de Compras " + vbCrLf + LAFunctions.GlobalSetting.NombreAppCompras, vbCritical + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
         End Try
     End Sub
 
@@ -551,7 +551,7 @@ Public Class MDIParent1
                 'frmOrdenes.Show()
             End If
         Else
-            MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+            MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
         End If
     End Sub
 
@@ -568,7 +568,7 @@ Public Class MDIParent1
 
             'frmOrdenes.Show()
         Else
-            MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, MDI_GlobalSettings.TituloMensajes)
+            MsgBox("No se ha podido obtener el establecimiento seleccionado", MsgBoxStyle.Critical + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
         End If
     End Sub
 

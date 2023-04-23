@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControladorCommon.vb" />
+    <Compile Include="GlobalSetting.vb" />
     <Compile Include="LuzAzulCommon.vb" />
     <Compile Include="LuzAzulCompras.vb" />
     <Compile Include="LuzAzulConfiguracion.vb" />
