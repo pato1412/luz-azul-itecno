@@ -20,39 +20,6 @@ Public Class Controlador
         'Busco en la base los ids de los centros de distribucion
         LoadCentrosDistribucion()
 
-        'verifico el cuit de la empresa y determino si es fabrica
-        LogEvent.Add("VerificarFabrica()")
-        Dim respuesta As ResponseCuit = fachadaBD.GetCUITEmpresa()
-        If respuesta.ConsultaExitosa Then
-            CUIT = respuesta.CUIT
-            EsFabrica = (respuesta.CUIT = LAFunctions.GlobalSetting.CUITEnsemble)
-        Else
-            WriteLogFile("La funcion verificar fabrica ha dado error")
-            MsgBox(respuesta.mensaje, vbExclamation + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
-        End If
-
-        ' Obtengo las configuraciones de envio de mails
-        LogEvent.Add("LeerEntidadesMailings()")
-        Dim respuestaEntidades As ResponseEntidades = fachadaBD.LeerEntidadesMailings()
-        If respuestaEntidades.ConsultaExitosa = True Then
-            'si la configuraciones estan cargadas sobreescribo las que vienen por default
-            LAFunctions.GlobalSetting.SMTP = respuestaEntidades.SMTPServer
-            LAFunctions.GlobalSetting.MailPort = respuestaEntidades.Puerto
-            LAFunctions.GlobalSetting.MailFromAddress = respuestaEntidades.Email
-            LAFunctions.GlobalSetting.MailUsername = respuestaEntidades.UID
-            LAFunctions.GlobalSetting.MailPassword = respuestaEntidades.PWD
-            LAFunctions.GlobalSetting.MailEnableSSL = respuestaEntidades.UsaSSL
-        End If
-
-        LogEvent.Add("GetRazonSocial()")
-        Dim RespuestaRazonSocial As LAFunctions.LuzAzulCommon.ResponseRazonSocial = fachadaBD.GetRazonSocial()
-        If RespuestaRazonSocial.ConsultaExitosa = True Then
-            RazonSocial = RespuestaRazonSocial.RazonSocial
-        Else
-            WriteLogFile("La funcion Get Razon social ha dado error")
-            MsgBox(respuesta.mensaje, vbExclamation + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
-        End If
-
 
     End Sub
 
@@ -77,23 +44,13 @@ Public Class Controlador
     Public Shared Function GetMostrarTodosDepositos() As Boolean
         Return MostrarTodosDepositos
     End Function
-    Public Shared Sub AddListEstablecimientoSeleccionados(est As Establecimiento)
-        ListEstablecimientosSeleccionados.Add(est)
-    End Sub
-    Public Shared Sub SetListEstablecimientosSeleccionados(Ests As List(Of Establecimiento))
-        ListEstablecimientosSeleccionados = Ests
+    Public Shared Sub SetCurrentEstablecimiento(ByVal EstableciminetoId As String)
+        Dim pos As Integer = ListEstablecimientos.FindIndex(Function(element) element.EstablecimientoId = EstableciminetoId)
+        If pos >= 0 Then
+            CurrentEstablecimiento = ListEstablecimientos(pos)
+        End If
     End Sub
 
-    Public Function GetListEstablecimientosSeleccionados() As List(Of Establecimiento)
-        Return ListEstablecimientosSeleccionados
-    End Function
-
-    Public Shared Sub SetListEstablecimientos(Ests As List(Of Establecimiento))
-        ListEstablecimientos = Ests
-    End Sub
-    Public Function GetListEstablecimientos() As List(Of Establecimiento)
-        Return ListEstablecimientos
-    End Function
     Public Shared Function GetNombreBaseDB() As String
         Return fachadaBD.NombreBase
     End Function
@@ -101,37 +58,75 @@ Public Class Controlador
     Public Shared Function Query() As List(Of String)
         Return fachadaBD.Query
     End Function
+    Public Sub SetDatabaseName(ByVal DBName As String)
+        fachadaBD.SetNombreBase(DBName)
+    End Sub
     Public Function DoLogin(ByVal Usuario As String, ByVal Clave As String) As ResponseLogin
-        Dim respuesta As ResponseLogin
-        respuesta = fachadaBD.DoLogin(Usuario, Clave)
-        If (respuesta.PermiteLogin) Then
-            UsuarioId = respuesta.mensaje 'usuario logueado
-            EsAdministrador = respuesta.EsAdministrador
+        Dim respuesta As New ResponseLogin
+        If CurrentEstablecimiento.DbName <> "" Then
+            respuesta = fachadaBD.DoLogin(Usuario, Clave, CurrentEstablecimiento.DbName)
+            If (respuesta.PermiteLogin) Then
+                UsuarioId = respuesta.mensaje 'usuario logueado
+                EsAdministrador = respuesta.EsAdministrador
 
-            LogEvent.Add("Usuario Logueado")
+                'Lo primero que hago es Setear la Base de datos de la FRQ
+                SetDatabaseName(CurrentEstablecimiento.DbName)
+
+                'verifico el cuit de la empresa y determino si es fabrica
+                LogEvent.Add("VerificarFabrica()")
+                Dim respuestaEmpresa As ResponseCuit = fachadaBD.GetCUITEmpresa()
+                If respuestaEmpresa.ConsultaExitosa Then
+                    CUIT = respuestaEmpresa.CUIT
+                    EsFabrica = (respuestaEmpresa.CUIT = LAFunctions.GlobalSetting.CUITEnsemble)
+                Else
+                    WriteLogFile("La funcion verificar fabrica ha dado error")
+                    MsgBox(respuestaEmpresa.mensaje, vbExclamation + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
+                End If
+
+                ' Obtengo las configuraciones de envio de mails
+                LogEvent.Add("LeerEntidadesMailings()")
+                Dim respuestaEntidades As ResponseEntidades = fachadaBD.LeerEntidadesMailings(CurrentEstablecimiento.EstablecimientoId)
+                If respuestaEntidades.ConsultaExitosa = True Then
+                    'si la configuraciones estan cargadas sobreescribo las que vienen por default
+                    LAFunctions.GlobalSetting.SMTP = respuestaEntidades.SMTPServer
+                    LAFunctions.GlobalSetting.MailPort = respuestaEntidades.Puerto
+                    LAFunctions.GlobalSetting.MailFromAddress = respuestaEntidades.Email
+                    LAFunctions.GlobalSetting.MailUsername = respuestaEntidades.UID
+                    LAFunctions.GlobalSetting.MailPassword = respuestaEntidades.PWD
+                    LAFunctions.GlobalSetting.MailEnableSSL = respuestaEntidades.UsaSSL
+                End If
+
+                LogEvent.Add("GetRazonSocial()")
+                Dim RespuestaRazonSocial As LAFunctions.LuzAzulCommon.ResponseRazonSocial = fachadaBD.GetRazonSocial()
+                If RespuestaRazonSocial.ConsultaExitosa = True Then
+                    RazonSocial = RespuestaRazonSocial.RazonSocial
+                Else
+                    WriteLogFile("La funcion Get Razon social ha dado error")
+                    MsgBox(respuesta.mensaje, vbExclamation + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
+                End If
+
+                LogEvent.Add("Usuario Logueado")
+            End If
+        Else
+            WriteLogFile("El establecimento seleccionado no ha sido configurado correctamente y no tiene una base de datos asociada")
+            MsgBox("El establecimento seleccionado no ha sido configurado", vbExclamation + vbOKOnly, LAFunctions.GlobalSetting.TituloMensajes)
         End If
-
         Return respuesta
     End Function
 
-    Public Function GetEstablecimientosUsuario(ByVal UsuarioId As String) As ResponseEstablecimiento
+    Public Function GetAllEstablecimientos() As ResponseEstablecimiento
         Dim respuestaEstablecimiento As ResponseEstablecimiento
 
-        respuestaEstablecimiento = fachadaBD.GetEstablecimientosUsuario(UsuarioId, EsFabrica, EsAdministrador)
+        respuestaEstablecimiento = fachadaBD.GetAllEstablecimientos()
         If (respuestaEstablecimiento.ConsultaExitosa) Then
-            If respuestaEstablecimiento.rs.Count = 1 Then
-                LogEvent.Add("El usuario tiene un solo establecimiento asociado")
-            Else
-                ListEstablecimientos = respuestaEstablecimiento.rs
-                LogEvent.Add("El usuario tiene " + respuestaEstablecimiento.rs.Count.ToString() + " establecimientos")
-            End If
+            ListEstablecimientos = respuestaEstablecimiento.rs
+            LogEvent.Add("El usuario tiene " + respuestaEstablecimiento.rs.Count.ToString() + " establecimientos")
         Else
             'Ocurrio un error al obtener el o los establecimientos
             WriteLogFile("Ocurrio un error al obtener el o los establecimientos")
         End If
 
         Return respuestaEstablecimiento
-
     End Function
 
     Public Function GetDepositosUsuario() As ResponseDeposito

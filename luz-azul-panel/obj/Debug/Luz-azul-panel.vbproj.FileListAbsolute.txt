@@ -41,8 +41,6 @@ C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\Luz Azul G
 C:\Users\gusta\source\repos\luz-azul-gestion\Luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmDepositos.resources
 C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\luz-azul-panel.vbprojAssemblyReference.cache
 C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmDepositos.resources
-C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmEstablecimientos.resources
-C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmEstablecimientosMultiple.resources
 C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz_Azul_MDI.frmLogin.resources
 C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz_Azul_MDI.MDIParent1.resources
 C:\Users\gusta\source\repos\luz-azul-itecno\luz-azul-panel\obj\Debug\Luz_Azul_MDI.Resources.resources

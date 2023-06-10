@@ -108,18 +108,6 @@
     <Compile Include="Vista\frmDepositos.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Vista\frmEstablecimientos.Designer.vb">
-      <DependentUpon>frmEstablecimientos.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Vista\frmEstablecimientos.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Vista\frmEstablecimientosMultiple.designer.vb">
-      <DependentUpon>frmEstablecimientosMultiple.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Vista\frmEstablecimientosMultiple.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Vista\frmLogin.Designer.vb">
       <DependentUpon>frmLogin.vb</DependentUpon>
     </Compile>
@@ -152,12 +140,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Vista\frmDepositos.resx">
       <DependentUpon>frmDepositos.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Vista\frmEstablecimientos.resx">
-      <DependentUpon>frmEstablecimientos.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Vista\frmEstablecimientosMultiple.resx">
-      <DependentUpon>frmEstablecimientosMultiple.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Vista\frmLogin.resx">
       <DependentUpon>frmLogin.vb</DependentUpon>

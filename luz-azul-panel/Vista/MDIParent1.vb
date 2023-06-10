@@ -241,10 +241,6 @@ Public Class MDIParent1
         controlador.ClearLog()
 
         'reseteo el valor antes de mostrar el form
-        Controlador.SetMostrarFrameDepositos(False)
-        Dim frmEsts = New frmEstablecimientos()
-        frmEsts.ShowDialog()
-
         ToolStripStatusLabelEstablecimiento.Text = "Establecimiento: " + controlador.GetCurrentEstablecimiento.Descripcion
 
         If controlador.GetCurrentEstablecimientoId() <> "" Then
@@ -622,13 +618,6 @@ Public Class MDIParent1
     End Sub
 
 
-    Private Sub ToolStripStatusLabelEstablecimiento_DoubleClick(sender As Object, e As EventArgs) Handles ToolStripStatusLabelEstablecimiento.DoubleClick
-
-        Controlador.SetMostrarFrameDepositos(False)
-        Dim frmEsts = New frmEstablecimientos()
-        frmEsts.ShowDialog()
-
-    End Sub
 
 
     Private Sub AdministrarPromocionesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AdministrarPromocionesToolStripMenuItem.Click

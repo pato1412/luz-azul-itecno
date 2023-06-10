@@ -585,8 +585,8 @@
                 If Not rs.EOF Then
                     Dim ListaRegistros As List(Of Establecimiento) = New List(Of Establecimiento)
                     Do While Not rs.EOF
-                        ListaRegistros.Add(New Establecimiento(rs("EstablecimientoId").Valor, rs("Descripcion").Valor, EsPropio))
-                        rs.MoveNext()
+                    ListaRegistros.Add(New Establecimiento(rs("EstablecimientoId").Valor, rs("Descripcion").Valor, EsPropio, ""))
+                    rs.MoveNext()
                     Loop
 
                     respuesta.rs = ListaRegistros

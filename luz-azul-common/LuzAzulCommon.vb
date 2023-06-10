@@ -46,6 +46,7 @@ Public Class LuzAzulCommon
     Public Property NombreBase As String = ""
     Public Property NombreBaseEnsemble As String = "ENSEMBLE"
     Public Property NombreBasePrecios As String = "EMP008"
+    Public Property NombreBaseMaestros As String = "LuzAzulDB"
 
     'Configuraciones para el envio de emails
     Private Shared MailFromAddress As String = "contacto@luz-azul.com.ar"
@@ -203,10 +204,13 @@ Public Class LuzAzulCommon
         Public Property EstablecimientoId As String
         Public Property Descripcion As String
         Public Property EsPropio As Boolean
-        Public Sub New(ByVal IdEstablecimiento As String, DescripcionEstablecimiento As String, Propio As Boolean)
+        Public Property DbName As String
+
+        Public Sub New(ByVal IdEstablecimiento As String, DescripcionEstablecimiento As String, Propio As Boolean, ByVal Database As String)
             EstablecimientoId = IdEstablecimiento
             Descripcion = DescripcionEstablecimiento
             EsPropio = Propio
+            DbName = Database
         End Sub
     End Class
 
@@ -498,38 +502,77 @@ Public Class LuzAzulCommon
         End Try
     End Function
 
-    Public Function DoLogin(ByVal usuario As String, ByVal clave As String) As ResponseLogin
-        Dim Crip As Encripta = New Encripta
-        Dim HashPassword As String = Crip.Crypt(clave) ' Encripto para comparar con BD
+    Public Function EncodePassword(ByVal Cadena As String) As String
+        Dim nuevaCadena As String = ""
+        Dim orden As Integer = 1
+        Dim Letra As String
+
+        For i = 1 To Len(Cadena)
+            Letra = Mid(Cadena, i, 1)
+
+            If orden = 1 Then
+                Letra = Asc(Letra) + 15
+            ElseIf orden = 2 Then
+                Letra = Asc(Letra) - 22
+            ElseIf orden = 3 Then
+                Letra = Asc(Letra) - 13
+            ElseIf orden = 4 Then
+                Letra = Asc(Letra) + 11
+            End If
+            If orden = 4 Then
+                orden = 1
+            Else
+                orden = CInt(orden) + 1
+            End If
+
+            nuevaCadena += Chr(Letra)
+        Next
+
+        nuevaCadena = StrReverse(nuevaCadena)
+        Return nuevaCadena
+    End Function
+    Public Function DoLogin(ByVal usuario As String, ByVal clave As String, ByVal DatabaseName As String) As ResponseLogin
+        Dim HashPassword As String = EncodePassword(clave) ' Encripto para comparar con BD
         Dim respuesta As New ResponseLogin
 
         Try
-            rs.Source = "SELECT * FROM Usuarios WHERE UsuarioId = '" + usuario + "' AND Password = '" + HashPassword + "'"
-            Query.Add(rs.Source)
-            rs.Abrir()
-            If Not rs.EOF Then
-                respuesta.PermiteLogin = True
-                respuesta.mensaje = rs("usuarioId").Valor
+            Dim sqlQuery As String = "SELECT * FROM " + DatabaseName + ".dbo.Usuarios WHERE Usuario = '" + usuario + "' AND Password = '" + HashPassword + "'"
+
+            Query.Add(sqlQuery)
+            myCmd = New SqlCommand(sqlQuery, myConn)
+            myReader = myCmd.ExecuteReader()
+
+            If myReader.HasRows Then
+
+                Dim ListaRegistros As List(Of Establecimiento) = New List(Of Establecimiento)
+                Do While myReader.Read()
+
+                    respuesta.PermiteLogin = True
+                    respuesta.mensaje = myReader.GetValue(myReader.GetOrdinal("IdUsuarios"))
+
+                    Dim Categoria As String = IIf(IsDBNull(myReader.GetValue(myReader.GetOrdinal("Categoria"))), "", myReader.GetValue(myReader.GetOrdinal("Categoria")))
+                    If Categoria = "Administrador" Then
+                        respuesta.EsAdministrador = True
+                    Else
+                        respuesta.EsAdministrador = False
+                    End If
+                Loop
+                respuesta.ConsultaExitosa = True
             Else
                 respuesta.PermiteLogin = False
                 respuesta.mensaje = "Usuario o clave incorrectos"
             End If
-            rs.Cerrar()
+            myReader.Close()
 
-            ' Determino si el usuarios corresponde al grupo de administradores
-            rs.Source = "SELECT COUNT(*) EsAdministrador FROM RelUsuariosGrupos WHERE GrupoId = 'Administradores' AND UsuarioId = '" + usuario + "'"
-            Query.Add(rs.Source)
-            rs.Abrir()
-            If Not rs.EOF() Then
-                respuesta.EsAdministrador = Val(rs("EsAdministrador").Valor) > 0
-            End If
-            rs.Cerrar()
         Catch ex As Exception
             respuesta.mensaje = "Error BD iniciando sesión de usuario"
         End Try
 
         Return respuesta
     End Function
+    Public Sub SetNombreBase(ByVal Name As String)
+        NombreBase = Name
+    End Sub
     Public Function DoLoginSupervisor(ByVal usuario As String, ByVal clave As String, ByVal GrupoId As String) As ResponseLogin
         Dim Crip As Encripta = New Encripta
         Dim HashPassword As String = Crip.Crypt(clave) ' Encripto para comparar con BD
@@ -586,29 +629,33 @@ Public Class LuzAzulCommon
         End If
         rs.Cerrar()
     End Sub
-    Public Function LeerEntidadesMailings() As ResponseEntidades
+    Public Function LeerEntidadesMailings(ByVal EstablecimientoId As String) As ResponseEntidades
         Dim respuesta As New ResponseEntidades
 
         Try
-            rs.Source = "SELECT * FROM EntidadesMailings WHERE Defecto = 1"
-            Query.Add(rs.Source)
-            rs.Abrir()
-            If Not rs.EOF Then
-                ' Obtengo la configuracion del Mail por Defecto
-                respuesta.Email = rs("Email").Valor
-                respuesta.UID = rs("UID").Valor
-                respuesta.PWD = rs("PWD").Valor
-                respuesta.SMTPServer = rs("SMTPServer").Valor
-                respuesta.Puerto = rs("Puerto").Valor
-                respuesta.UsaSSL = rs("UsaSSL").Valor
-            End If
-            rs.Cerrar()
+            Dim sqlQuery As String = "SELECT TOP 1 * FROM " + NombreBaseEnsemble + ".dbo.EntidadesMailings WHERE EstablecimientoId = " + EstablecimientoId + " or EstablecimientoId is null order by EstablecimientoId DESC"
+            Query.Add(sqlQuery)
+            myCmd = New SqlCommand(sqlQuery, myConn)
+            myReader = myCmd.ExecuteReader()
+            If myReader.HasRows Then
+                Do While myReader.Read()
 
-            respuesta.ConsultaExitosa = True
+                    ' Obtengo la configuracion del Mail por Defecto
+                    respuesta.Email = myReader.GetValue(myReader.GetOrdinal("Email"))
+                    respuesta.UID = myReader.GetValue(myReader.GetOrdinal("UID"))
+                    respuesta.PWD = myReader.GetValue(myReader.GetOrdinal("PWD"))
+                    respuesta.SMTPServer = myReader.GetValue(myReader.GetOrdinal("SMTPServer"))
+                    respuesta.Puerto = myReader.GetValue(myReader.GetOrdinal("Puerto"))
+                    respuesta.UsaSSL = myReader.GetValue(myReader.GetOrdinal("UsaSSL"))
+                Loop
+                respuesta.ConsultaExitosa = True
+            Else
+                respuesta.mensaje = "Error DB consultando configuración Mail por Defecto"
+            End If
+            myReader.Close()
         Catch ex As Exception
             respuesta.mensaje = "Error DB consultando configuración Mail por Defecto"
         End Try
-
         Return respuesta
     End Function
     Public Function GetRazonSocial() As ResponseRazonSocial
@@ -635,16 +682,19 @@ Public Class LuzAzulCommon
         Dim respuesta As New ResponseCuit
 
         Try
-            rs.Source = "SELECT * FROM Configuracion WHERE Parametro = 'CUIT' "
-            Query.Add(rs.Source)
-            rs.Abrir()
-            If Not rs.EOF Then
-                respuesta.CUIT = rs("Valor").Valor
+            Dim sqlQuery As String = "SELECT * FROM " + NombreBase + ".dbo.Parametros Configuracion WHERE Variable = 'ssCUITFCe' "
+
+            myCmd = New SqlCommand(sqlQuery, myConn)
+            myReader = myCmd.ExecuteReader()
+            If myReader.HasRows Then
+                Do While myReader.Read()
+                    respuesta.CUIT = myReader.GetValue(myReader.GetOrdinal("Valor"))
+                Loop
                 respuesta.ConsultaExitosa = True
             Else
                 respuesta.mensaje = "No se encontro el parametro CUIT de la Empresa, comuniquese con el Administrador"
             End If
-            rs.Cerrar()
+            myReader.Close()
         Catch ex As Exception
             respuesta.mensaje = "Error BD No se encuentra el campo CUIT en los parametros de la empresa"
         End Try
@@ -703,7 +753,7 @@ Public Class LuzAzulCommon
             If Not rs.EOF Then
                 Dim ListaRegistros As List(Of Establecimiento) = New List(Of Establecimiento)
                 Do While Not rs.EOF
-                    ListaRegistros.Add(New Establecimiento(rs("EstablecimientoId").Valor, rs("Descripcion").Valor, EsPropio))
+                    ListaRegistros.Add(New Establecimiento(rs("EstablecimientoId").Valor, rs("Descripcion").Valor, EsPropio, ""))
                     rs.MoveNext()
                 Loop
 
@@ -719,42 +769,35 @@ Public Class LuzAzulCommon
 
         Return respuesta
     End Function
-    Public Function GetAllEstablecimientos(ByVal EsFabrica As Boolean) As ResponseEstablecimiento
+    Public Function GetAllEstablecimientos() As ResponseEstablecimiento
         Dim respuesta As New ResponseEstablecimiento
         Dim sqlQuery As String
 
         Try
-            Dim NombreTablaEstablecimiento As String = "Establecimientos"
-            Dim NombreTablaRelEstablecimiento As String = "RelEstablecimientosDepositos"
-            Dim EsPropio As Integer = 0
+            Dim NombreTablaEstablecimiento As String = "GWREstablecimientos"
+            Dim EsPropio As Boolean = False
 
-            If EsFabrica Then
-                NombreTablaEstablecimiento = "GWREstablecimientos"
-                NombreTablaRelEstablecimiento = "GWRRelEstablecimientosDepositos"
-                EsPropio = 1
-            End If
-
-            sqlQuery = "SELECT DISTINCT e.EstablecimientoId, e.Descripcion
+            sqlQuery = "SELECT e.EstablecimientoId, e.Descripcion, e.Propio, e.DbName
                     FROM " + NombreBaseEnsemble + ".dbo." + NombreTablaEstablecimiento + " e WHERE Alta = 1 ORDER BY e.Descripcion "
 
-            rs.Source = sqlQuery
-            Query.Add(rs.Source)
-            rs.Abrir()
-            If Not rs.EOF Then
+            myCmd = New SqlCommand(sqlQuery, myConn)
+            myReader = myCmd.ExecuteReader()
+            If myReader.HasRows Then
+
                 Dim ListaRegistros As List(Of Establecimiento) = New List(Of Establecimiento)
-                Do While Not rs.EOF
-                    ListaRegistros.Add(New Establecimiento(rs("EstablecimientoId").Valor, rs("Descripcion").Valor, EsPropio))
-                    rs.MoveNext()
+                Do While myReader.Read()
+                    EsPropio = IIf(Boolean.TryParse(myReader.GetValue(myReader.GetOrdinal("Propio")), EsPropio), EsPropio, False)
+                    ListaRegistros.Add(New Establecimiento(myReader.GetValue(myReader.GetOrdinal("EstablecimientoId")), myReader.GetValue(myReader.GetOrdinal("Descripcion")), EsPropio, myReader.GetValue(myReader.GetOrdinal("DbName"))))
                 Loop
 
                 respuesta.rs = ListaRegistros
                 respuesta.ConsultaExitosa = True
             Else
-                respuesta.mensaje = "El usuario no tiene establecimientos asociados"
+                respuesta.mensaje = "No hay establecimientos registrados en ENSEMBLE"
             End If
-            rs.Cerrar()
+            myReader.Close()
         Catch ex As Exception
-            respuesta.mensaje = "Error BD al consultar los establecimientos del usuario"
+            respuesta.mensaje = "Error BD al consultar los establecimientos"
         End Try
 
         Return respuesta

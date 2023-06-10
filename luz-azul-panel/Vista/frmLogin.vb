@@ -1,4 +1,5 @@
-﻿Public Class frmLogin
+﻿Imports LAFunctions.LuzAzulCommon
+Public Class frmLogin
     Private controlador As Controlador
 
     Private Sub frmLogin_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -10,9 +11,30 @@
         'Leo las configuraciones del archivo xml
         Controlador.LeerConfiguracionesXML()
 
-        LblEmpresa.Text = "Empresa: " + Controlador.GetRazonSOcial() + " (" + Controlador.GetNombreBaseDB + ")"
+        CargarComboEstablecimientos()
+
     End Sub
 
+    Private Sub CargarComboEstablecimientos()
+        Dim respuestaEstablecimiento As ResponseEstablecimiento
+
+        respuestaEstablecimiento = controlador.GetAllEstablecimientos()
+        If (respuestaEstablecimiento.ConsultaExitosa) Then
+            'cargo el combo
+            ComboEstablecimientos.ValueMember = "Value"
+            ComboEstablecimientos.DisplayMember = "Text"
+
+            For Each Est As Establecimiento In respuestaEstablecimiento.rs
+                ComboEstablecimientos.Items.Add(New LAFunctions.ComboItem(Est.Descripcion, Est.EstablecimientoId))
+            Next
+            ComboEstablecimientos.SelectedIndex = 0
+        Else
+            'Ocurrio un error al obtener el o los establecimientos
+            MsgBox(respuestaEstablecimiento.mensaje)
+        End If
+
+
+    End Sub
     Private Sub txtUsuario_KeyUp(sender As Object, e As KeyEventArgs) Handles txtUsuario.KeyUp
         ' Si presiono Enter en el campo usuario, hago foco en el campo clave
         If e.KeyValue = 13 Then txtClave.Focus()
@@ -32,16 +54,20 @@
             Exit Sub
         End If
 
+        If ComboEstablecimientos.SelectedIndex >= 0 Then
+            'Selecciono el Establecimiento Actual
+            Controlador.SetCurrentEstablecimiento(ComboEstablecimientos.SelectedItem.Value)
+        End If
+
         respuesta = controlador.DoLogin(txtUsuario.Text, txtClave.Text)
         If (respuesta.PermiteLogin) Then
             LblRespuesta.Visible = False
 
             Controlador.SetLogEvent("Usuario Logueado desde el MDI form")
 
-            Controlador.SetMostrarFrameDepositos(True)
+            MsgBox("ok")
+            Me.Close()
 
-            Dim frmEsts = New frmEstablecimientos()
-            frmEsts.ShowDialog()
 
             If controlador.GetCurrentEstablecimiento().EstablecimientoId <> "" Then
 
@@ -52,7 +78,7 @@
             End If
         Else
             'muestro el mensaje de respuesta
-            LblRespuesta.Text = respuesta.Mensaje
+            LblRespuesta.Text = respuesta.mensaje
             LblRespuesta.Visible = True
         End If
     End Sub

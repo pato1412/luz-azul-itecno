@@ -34,10 +34,13 @@ Partial Class frmLogin
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
-        Me.LblEmpresa = New System.Windows.Forms.Label()
+        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
+        Me.ComboEstablecimientos = New System.Windows.Forms.ComboBox()
+        Me.Label4 = New System.Windows.Forms.Label()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label1
@@ -46,7 +49,7 @@ Partial Class frmLogin
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.Font = New System.Drawing.Font("Arial", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(70, Byte), Integer), CType(CType(148, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(49, 208)
+        Me.Label1.Location = New System.Drawing.Point(95, 246)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(74, 22)
         Me.Label1.TabIndex = 0
@@ -58,7 +61,7 @@ Partial Class frmLogin
         Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Arial", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(70, Byte), Integer), CType(CType(148, Byte), Integer))
-        Me.Label2.Location = New System.Drawing.Point(49, 278)
+        Me.Label2.Location = New System.Drawing.Point(95, 318)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(58, 22)
         Me.Label2.TabIndex = 1
@@ -68,7 +71,7 @@ Partial Class frmLogin
         '
         Me.txtClave.BackColor = System.Drawing.Color.White
         Me.txtClave.Font = New System.Drawing.Font("Arial", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtClave.Location = New System.Drawing.Point(53, 304)
+        Me.txtClave.Location = New System.Drawing.Point(53, 342)
         Me.txtClave.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.txtClave.MaxLength = 100
         Me.txtClave.Name = "txtClave"
@@ -84,7 +87,7 @@ Partial Class frmLogin
         Me.BtnIngresar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.BtnIngresar.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BtnIngresar.ForeColor = System.Drawing.Color.White
-        Me.BtnIngresar.Location = New System.Drawing.Point(48, 381)
+        Me.BtnIngresar.Location = New System.Drawing.Point(48, 419)
         Me.BtnIngresar.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.BtnIngresar.Name = "BtnIngresar"
         Me.BtnIngresar.Size = New System.Drawing.Size(173, 49)
@@ -100,7 +103,7 @@ Partial Class frmLogin
         Me.BtnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.BtnSalir.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BtnSalir.ForeColor = System.Drawing.Color.White
-        Me.BtnSalir.Location = New System.Drawing.Point(240, 381)
+        Me.BtnSalir.Location = New System.Drawing.Point(240, 419)
         Me.BtnSalir.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.BtnSalir.Name = "BtnSalir"
         Me.BtnSalir.Size = New System.Drawing.Size(173, 49)
@@ -123,7 +126,7 @@ Partial Class frmLogin
         '
         Me.LblRespuesta.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblRespuesta.ForeColor = System.Drawing.Color.Red
-        Me.LblRespuesta.Location = New System.Drawing.Point(1, 347)
+        Me.LblRespuesta.Location = New System.Drawing.Point(1, 385)
         Me.LblRespuesta.Name = "LblRespuesta"
         Me.LblRespuesta.Size = New System.Drawing.Size(467, 28)
         Me.LblRespuesta.TabIndex = 8
@@ -138,7 +141,7 @@ Partial Class frmLogin
         Me.txtUsuario.BackColor = System.Drawing.Color.White
         Me.txtUsuario.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtUsuario.Font = New System.Drawing.Font("Arial", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtUsuario.Location = New System.Drawing.Point(53, 234)
+        Me.txtUsuario.Location = New System.Drawing.Point(53, 272)
         Me.txtUsuario.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.txtUsuario.MaxLength = 100
         Me.txtUsuario.Name = "txtUsuario"
@@ -159,10 +162,10 @@ Partial Class frmLogin
         'PictureBox2
         '
         Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
-        Me.PictureBox2.Location = New System.Drawing.Point(383, 237)
+        Me.PictureBox2.Location = New System.Drawing.Point(55, 237)
         Me.PictureBox2.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(24, 23)
+        Me.PictureBox2.Size = New System.Drawing.Size(28, 28)
         Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox2.TabIndex = 9
         Me.PictureBox2.TabStop = False
@@ -170,33 +173,57 @@ Partial Class frmLogin
         'PictureBox3
         '
         Me.PictureBox3.Image = CType(resources.GetObject("PictureBox3.Image"), System.Drawing.Image)
-        Me.PictureBox3.Location = New System.Drawing.Point(381, 308)
+        Me.PictureBox3.Location = New System.Drawing.Point(56, 311)
         Me.PictureBox3.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(25, 23)
+        Me.PictureBox3.Size = New System.Drawing.Size(28, 28)
         Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox3.TabIndex = 10
         Me.PictureBox3.TabStop = False
         '
-        'LblEmpresa
+        'PictureBox4
         '
-        Me.LblEmpresa.AutoSize = True
-        Me.LblEmpresa.BackColor = System.Drawing.Color.Transparent
-        Me.LblEmpresa.Font = New System.Drawing.Font("Arial", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LblEmpresa.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(70, Byte), Integer), CType(CType(148, Byte), Integer))
-        Me.LblEmpresa.Location = New System.Drawing.Point(49, 175)
-        Me.LblEmpresa.Name = "LblEmpresa"
-        Me.LblEmpresa.Size = New System.Drawing.Size(92, 22)
-        Me.LblEmpresa.TabIndex = 11
-        Me.LblEmpresa.Text = "Empresa:"
+        Me.PictureBox4.Image = CType(resources.GetObject("PictureBox4.Image"), System.Drawing.Image)
+        Me.PictureBox4.Location = New System.Drawing.Point(55, 158)
+        Me.PictureBox4.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.PictureBox4.Name = "PictureBox4"
+        Me.PictureBox4.Size = New System.Drawing.Size(35, 28)
+        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.PictureBox4.TabIndex = 15
+        Me.PictureBox4.TabStop = False
+        '
+        'ComboEstablecimientos
+        '
+        Me.ComboEstablecimientos.BackColor = System.Drawing.Color.White
+        Me.ComboEstablecimientos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboEstablecimientos.Font = New System.Drawing.Font("Arial", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ComboEstablecimientos.FormattingEnabled = True
+        Me.ComboEstablecimientos.Location = New System.Drawing.Point(53, 195)
+        Me.ComboEstablecimientos.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.ComboEstablecimientos.Name = "ComboEstablecimientos"
+        Me.ComboEstablecimientos.Size = New System.Drawing.Size(359, 30)
+        Me.ComboEstablecimientos.TabIndex = 14
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Arial", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(70, Byte), Integer), CType(CType(148, Byte), Integer))
+        Me.Label4.Location = New System.Drawing.Point(97, 167)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(145, 22)
+        Me.Label4.TabIndex = 13
+        Me.Label4.Text = "Establecimiento"
         '
         'frmLogin
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(467, 466)
-        Me.Controls.Add(Me.LblEmpresa)
+        Me.ClientSize = New System.Drawing.Size(467, 505)
+        Me.Controls.Add(Me.PictureBox4)
+        Me.Controls.Add(Me.ComboEstablecimientos)
+        Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.PictureBox3)
         Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.LblRespuesta)
@@ -219,6 +246,7 @@ Partial Class frmLogin
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -235,5 +263,7 @@ Partial Class frmLogin
     Friend WithEvents txtUsuario As TextBox
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents PictureBox3 As PictureBox
-    Friend WithEvents LblEmpresa As Label
+    Friend WithEvents PictureBox4 As PictureBox
+    Friend WithEvents ComboEstablecimientos As ComboBox
+    Friend WithEvents Label4 As Label
 End Class
