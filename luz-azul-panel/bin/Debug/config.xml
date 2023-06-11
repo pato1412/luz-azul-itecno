@@ -1,8 +1,0 @@
-<?xml version='1.0' ?>
-<settings>
-	<debug>
-		<general>false</general>
-		<Precios>true</Precios>
-		<EnsembleSRL>true</EnsembleSRL>
-	</debug>
-</settings>

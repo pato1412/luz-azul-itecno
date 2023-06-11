@@ -349,3 +349,7 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /.vs/luz-azul-gestion/v16/*.suo
+/luz-azul-panel/bin
+/luz-azul-panel/obj
+/luz-azul-panel/.vs
+/luz-azul-common/obj
