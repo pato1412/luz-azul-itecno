@@ -65,10 +65,6 @@ Public Class frmLogin
 
             Controlador.SetLogEvent("Usuario Logueado desde el MDI form")
 
-            MsgBox("ok")
-            Me.Close()
-
-
             If controlador.GetCurrentEstablecimiento().EstablecimientoId <> "" Then
 
                 Dim frmMDI As MDIParent1 = New MDIParent1

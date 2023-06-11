@@ -42,19 +42,19 @@ Public Class LuzAzulCommon
     Public conn As Conexion = New Conexion
     Public rs As RegSet = New RegSet
     Public Query As List(Of String) = New List(Of String)
-    Public Shared TitulosMensaje As String = "Luz Azul"
+    Public Shared TitulosMensaje As String = GlobalSetting.TituloMensajes
     Public Property NombreBase As String = ""
-    Public Property NombreBaseEnsemble As String = "ENSEMBLE"
-    Public Property NombreBasePrecios As String = "EMP008"
-    Public Property NombreBaseMaestros As String = "LuzAzulDB"
+    Public Property NombreBaseEnsemble As String = GlobalSetting.NombreBaseEnsemble
+    Public Property NombreBasePrecios As String = GlobalSetting.NombreBasePrecios
+    Public Property NombreBaseMaestros As String = GlobalSetting.NombreBaseMaestros
 
     'Configuraciones para el envio de emails
-    Private Shared MailFromAddress As String = "contacto@luz-azul.com.ar"
-    Private Shared MailUsername As String = "contacto@luz-azul.com.ar"
-    Private Shared MailPassword As String = "luzazul499"
-    Private Shared SMTP As String = "smtp.gmail.com"
-    Private Shared MailPort As Integer = 587
-    Private Shared MailEnableSSL As Boolean = True
+    Private Shared MailFromAddress As String = GlobalSetting.MailFromAddress
+    Private Shared MailUsername As String = GlobalSetting.MailUsername
+    Private Shared MailPassword As String = GlobalSetting.MailPassword
+    Private Shared SMTP As String = GlobalSetting.SMTP
+    Private Shared MailPort As Integer = GlobalSetting.MailPort
+    Private Shared MailEnableSSL As Boolean = GlobalSetting.MailEnableSSL
 
     Public Sub New()
         Try
@@ -70,21 +70,10 @@ Public Class LuzAzulCommon
             MsgBox("Error al establecer la conexion a la base de datos", vbOKOnly, TitulosMensaje)
         End Try
 
-        Try
-
-            ' Intento setear los parametros de Email
-            'SetEntidadesMailings()
-        Catch ex As Exception
-            MsgBox("Error al setear los parametros del mail", vbOKOnly, TitulosMensaje)
-        End Try
     End Sub
 
     Private Function GetSqlServerConnectionString() As String
-        GetSqlServerConnectionString = "Server=tcp:luzazul.cfm2g7bbnqws.us-east-2.rds.amazonaws.com,1433;" _
-& "Database=LuzAzulDB;" _
-& "Uid=admin;" _
-& "Pwd=UpWAXosx(b;" _
-& "Connection Timeout=30;"
+        GetSqlServerConnectionString = "Server=" + GlobalSetting.DBConecctionString + ";Database=" + NombreBaseMaestros + ";Uid=" + GlobalSetting.DBUsername + ";Pwd=" + GlobalSetting.DBPassword + ";Connection Timeout=30;"
     End Function
 
     Protected Overrides Sub Finalize()
@@ -548,7 +537,7 @@ Public Class LuzAzulCommon
                 Do While myReader.Read()
 
                     respuesta.PermiteLogin = True
-                    respuesta.mensaje = myReader.GetValue(myReader.GetOrdinal("IdUsuarios"))
+                    respuesta.mensaje = myReader.GetValue(myReader.GetOrdinal("Usuario"))
 
                     Dim Categoria As String = IIf(IsDBNull(myReader.GetValue(myReader.GetOrdinal("Categoria"))), "", myReader.GetValue(myReader.GetOrdinal("Categoria")))
                     If Categoria = "Administrador" Then
@@ -614,21 +603,6 @@ Public Class LuzAzulCommon
         Return respuesta
     End Function
 
-    Private Sub SetEntidadesMailings()
-        rs.Source = "SELECT * FROM EntidadesMailings WHERE Defecto = 1"
-        Query.Add(rs.Source)
-        rs.Abrir()
-        If Not rs.EOF Then
-            ' Obtengo la configuracion del Mail por Defecto
-            MailFromAddress = rs("Email").Valor
-            MailUsername = rs("UID").Valor
-            MailPassword = rs("PWD").Valor
-            SMTP = rs("SMTPServer").Valor
-            MailPort = rs("Puerto").Valor
-            MailEnableSSL = rs("UsaSSL").Valor
-        End If
-        rs.Cerrar()
-    End Sub
     Public Function LeerEntidadesMailings(ByVal EstablecimientoId As String) As ResponseEntidades
         Dim respuesta As New ResponseEntidades
 
@@ -662,16 +636,21 @@ Public Class LuzAzulCommon
         Dim respuesta As New ResponseRazonSocial
 
         Try
-            rs.Source = "SELECT * FROM Configuracion WHERE Parametro = 'RazonSocial'"
-            Query.Add(rs.Source)
-            rs.Abrir()
-            If Not rs.EOF Then
-                respuesta.RazonSocial = rs("Valor").Valor
+            Dim sqlQuery As String = "SELECT TOP 1 * FROM " + NombreBase + ".dbo.Parametros WHERE Variable = 'ssEmpresa'"
+
+            Query.Add(sqlQuery)
+            myCmd = New SqlCommand(sqlQuery, myConn)
+            myReader = myCmd.ExecuteReader()
+            If myReader.HasRows Then
+                Do While myReader.Read()
+                    respuesta.RazonSocial = Trim(myReader.GetValue(myReader.GetOrdinal("Valor")))
+                Loop
                 respuesta.ConsultaExitosa = True
             Else
                 respuesta.mensaje = "No se encontro el parametro Razon Social de la Empresa, comuniquese con el Administrador"
             End If
-            rs.Cerrar()
+            myReader.Close()
+
         Catch ex As Exception
             respuesta.mensaje = "Error DB consultando Razon Social"
         End Try
@@ -715,56 +694,6 @@ Public Class LuzAzulCommon
             respuesta.ConsultaExitosa = True
         Catch ex As Exception
             respuesta.mensaje = "Error BD verificando si es Fabrica"
-        End Try
-
-        Return respuesta
-    End Function
-    Public Function GetEstablecimientosUsuario(ByVal usuarioId As String, ByVal EsFabrica As Boolean, ByVal EsAdministrador As Boolean) As ResponseEstablecimiento
-        Dim respuesta As New ResponseEstablecimiento
-        Dim sqlQuery As String
-
-        Try
-            Dim NombreTablaEstablecimiento As String = "Establecimientos"
-            Dim NombreTablaRelEstablecimiento As String = "RelEstablecimientosDepositos"
-            Dim EsPropio As Integer = 0
-
-            If EsFabrica Then
-                NombreTablaEstablecimiento = "GWREstablecimientos"
-                NombreTablaRelEstablecimiento = "GWRRelEstablecimientosDepositos"
-                EsPropio = 1
-            End If
-
-            If EsAdministrador Then
-                sqlQuery = "SELECT DISTINCT e.EstablecimientoId, e.Descripcion
-                    FROM " + NombreBaseEnsemble + ".dbo." + NombreTablaEstablecimiento + " e
-                    JOIN " + NombreBaseEnsemble + ".dbo." + NombreTablaRelEstablecimiento + " red ON red.EstablecimientoId = e.EstablecimientoId"
-            Else
-                sqlQuery = "SELECT DISTINCT e.EstablecimientoId, e.Descripcion
-                    FROM Usuarios u 
-                    JOIN RelUsuariosDepositos rud ON u.UsuarioId = rud.UsuarioId 
-                    JOIN " + NombreBaseEnsemble + ".dbo." + NombreTablaRelEstablecimiento + " red ON red.DepositoId = rud.DepositoId 
-                    JOIN " + NombreBaseEnsemble + ".dbo." + NombreTablaEstablecimiento + " e ON e.EstablecimientoId = red.EstablecimientoId 
-                    WHERE u.UsuarioId = '" + usuarioId + "'"
-            End If
-
-            rs.Source = sqlQuery
-            Query.Add(rs.Source)
-            rs.Abrir()
-            If Not rs.EOF Then
-                Dim ListaRegistros As List(Of Establecimiento) = New List(Of Establecimiento)
-                Do While Not rs.EOF
-                    ListaRegistros.Add(New Establecimiento(rs("EstablecimientoId").Valor, rs("Descripcion").Valor, EsPropio, ""))
-                    rs.MoveNext()
-                Loop
-
-                respuesta.rs = ListaRegistros
-                respuesta.ConsultaExitosa = True
-            Else
-                respuesta.mensaje = "El usuario no tiene establecimientos asociados"
-            End If
-            rs.Cerrar()
-        Catch ex As Exception
-            respuesta.mensaje = "Error BD al consultar los establecimientos del usuario"
         End Try
 
         Return respuesta
