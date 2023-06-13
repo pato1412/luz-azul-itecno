@@ -194,12 +194,14 @@ Public Class LuzAzulCommon
         Public Property Descripcion As String
         Public Property EsPropio As Boolean
         Public Property DbName As String
+        Public Property SucursalId As String
 
-        Public Sub New(ByVal IdEstablecimiento As String, DescripcionEstablecimiento As String, Propio As Boolean, ByVal Database As String)
+        Public Sub New(ByVal IdEstablecimiento As String, DescripcionEstablecimiento As String, Propio As Boolean, ByVal Database As String, ByVal Sucursal As String)
             EstablecimientoId = IdEstablecimiento
             Descripcion = DescripcionEstablecimiento
             EsPropio = Propio
             DbName = Database
+            SucursalId = Sucursal
         End Sub
     End Class
 
@@ -706,7 +708,7 @@ Public Class LuzAzulCommon
             Dim NombreTablaEstablecimiento As String = "GWREstablecimientos"
             Dim EsPropio As Boolean = False
 
-            sqlQuery = "SELECT e.EstablecimientoId, e.Descripcion, e.Propio, e.DbName
+            sqlQuery = "SELECT e.EstablecimientoId, e.Descripcion, e.Propio, e.DbName, e.SucursalId
                     FROM " + NombreBaseEnsemble + ".dbo." + NombreTablaEstablecimiento + " e WHERE Alta = 1 ORDER BY e.Descripcion "
 
             myCmd = New SqlCommand(sqlQuery, myConn)
@@ -716,7 +718,7 @@ Public Class LuzAzulCommon
                 Dim ListaRegistros As List(Of Establecimiento) = New List(Of Establecimiento)
                 Do While myReader.Read()
                     EsPropio = IIf(Boolean.TryParse(myReader.GetValue(myReader.GetOrdinal("Propio")), EsPropio), EsPropio, False)
-                    ListaRegistros.Add(New Establecimiento(myReader.GetValue(myReader.GetOrdinal("EstablecimientoId")), myReader.GetValue(myReader.GetOrdinal("Descripcion")), EsPropio, myReader.GetValue(myReader.GetOrdinal("DbName"))))
+                    ListaRegistros.Add(New Establecimiento(myReader.GetValue(myReader.GetOrdinal("EstablecimientoId")), myReader.GetValue(myReader.GetOrdinal("Descripcion")), EsPropio, myReader.GetValue(myReader.GetOrdinal("DbName")), myReader.GetValue(myReader.GetOrdinal("SucursalId"))))
                 Loop
 
                 respuesta.rs = ListaRegistros
@@ -804,9 +806,9 @@ Public Class LuzAzulCommon
                 sqlQuery += ", cpp.CantDiasReparo, cpp.FrecuenciaPed, cpp.PlazoEntregaPed, cpp.KilosMin, cpp.EstablecimientoIdDistribucion "
             End If
 
-            sqlQuery += " FROM ClasificacionesProductos cp
-                JOIN RelArbolClasifProductos ra ON ra.ClasifProdIdPadre = cp.ClasificacionProdId
-                JOIN ClasificacionesProductos ch ON ch.ClasificacionProdId = ra.ClasifProdIdHijo "
+            sqlQuery += " FROM " + NombreBaseEnsemble + ".dbo.ClasificacionesProductos cp
+                JOIN " + NombreBaseEnsemble + ".dbo.RelArbolClasifProductos ra ON ra.ClasifProdIdPadre = cp.ClasificacionProdId
+                JOIN " + NombreBaseEnsemble + ".dbo.ClasificacionesProductos ch ON ch.ClasificacionProdId = ra.ClasifProdIdHijo "
 
             If EstablecimientoId <> "" Then
                 sqlQuery += "Left JOIN " + NombreBaseEnsemble + ".dbo.ConfigPedidoProveedor cpp ON cpp.EstablecimientoId = " + EstablecimientoId + " AND cpp.NombreProveedor = ch.Descripcion "
@@ -827,25 +829,28 @@ Public Class LuzAzulCommon
                 sqlQuery += "WHERE cp.Descripcion = '" + NombreClasificacionARealizarPedidos + "' ORDER BY ch.Descripcion"
             End If
 
-            rs.Source = sqlQuery
-            Query.Add(rs.Source)
-            rs.Abrir()
-            If Not rs.EOF Then
+
+            Query.Add(sqlQuery)
+            myCmd = New SqlCommand(sqlQuery, myConn)
+            myReader = myCmd.ExecuteReader()
+            If myReader.HasRows Then
                 Dim ListaRegistros As List(Of Clasificacion) = New List(Of Clasificacion)
                 Dim CantDiasReparo As Integer
                 Dim FrecuenciaPed As Integer
                 Dim PlazoEntregaPed As Integer
                 Dim KilosMin As Integer
                 Dim Distribuidor As String
-                Do While Not rs.EOF
-                    CantDiasReparo = If(IsDBNull(rs("CantDiasReparo").Valor), 0, Integer.Parse(rs("CantDiasReparo").Valor))
-                    FrecuenciaPed = If(IsDBNull(rs("FrecuenciaPed").Valor), 0, Integer.Parse(rs("FrecuenciaPed").Valor))
-                    PlazoEntregaPed = If(IsDBNull(rs("PlazoEntregaPed").Valor), 0, Integer.Parse(rs("PlazoEntregaPed").Valor))
-                    KilosMin = If(IsDBNull(rs("KilosMin").Valor), 0, Integer.Parse(rs("KilosMin").Valor))
-                    Distribuidor = If(IsDBNull(rs("EstablecimientoIdDistribucion").Valor), "", rs("EstablecimientoIdDistribucion").Valor)
-                    Dim currentClass = New Clasificacion(rs("ClasificacionProdId").Valor, rs("Descripcion").Valor, rs("ClasificacionProdPadre").Valor, CantDiasReparo, FrecuenciaPed, PlazoEntregaPed, KilosMin, Distribuidor)
+
+                Do While myReader.Read()
+                    CantDiasReparo = If(IsDBNull(myReader.GetValue(myReader.GetOrdinal("CantDiasReparo"))), 0, Integer.Parse(myReader.GetValue(myReader.GetOrdinal("CantDiasReparo"))))
+                    FrecuenciaPed = If(IsDBNull(myReader.GetValue(myReader.GetOrdinal("FrecuenciaPed"))), 0, Integer.Parse(myReader.GetValue(myReader.GetOrdinal("FrecuenciaPed"))))
+                    PlazoEntregaPed = If(IsDBNull(myReader.GetValue(myReader.GetOrdinal("PlazoEntregaPed"))), 0, Integer.Parse(myReader.GetValue(myReader.GetOrdinal("PlazoEntregaPed"))))
+                    KilosMin = If(IsDBNull(myReader.GetValue(myReader.GetOrdinal("KilosMin"))), 0, Integer.Parse(myReader.GetValue(myReader.GetOrdinal("KilosMin"))))
+                    Distribuidor = If(IsDBNull(myReader.GetValue(myReader.GetOrdinal("EstablecimientoIdDistribucion"))), "", myReader.GetValue(myReader.GetOrdinal("EstablecimientoIdDistribucion")))
+
+                    Dim currentClass = New Clasificacion(myReader.GetValue(myReader.GetOrdinal("ClasificacionProdId")), myReader.GetValue(myReader.GetOrdinal("Descripcion")), myReader.GetValue(myReader.GetOrdinal("ClasificacionProdPadre")), CantDiasReparo, FrecuenciaPed, PlazoEntregaPed, KilosMin, Distribuidor)
+
                     ListaRegistros.Add(currentClass)
-                    rs.MoveNext()
                 Loop
 
                 respuesta.ConsultaExitosa = True
@@ -854,7 +859,7 @@ Public Class LuzAzulCommon
                 respuesta.ConsultaExitosa = True
                 respuesta.mensaje = "No se encontraron clasificaciones para realizar pedidos"
             End If
-            rs.Cerrar()
+            myReader.Close()
         Catch ex As Exception
             respuesta.mensaje = "Error BD consultando el arbol de clasificaciones"
         End Try
@@ -892,47 +897,27 @@ Public Class LuzAzulCommon
         Return respuesta
     End Function
 
-    Public Function GetDepositosUsuario(ByVal UsuarioId As String, ByVal EstablecimientoId As String, ByVal EsFabrica As Boolean, ByVal EsAdministrador As Boolean, ByVal MostrarTodosDepositos As Boolean) As ResponseDeposito
+    Public Function GetDepositosUsuario(ByVal UsuarioId As String, ByVal SucursalId As String) As ResponseDeposito
         Dim respuesta As New ResponseDeposito
         Dim sqlQuery As String
 
         Try
-            Dim NombreTablaRelEstablecimiento As String = "RelEstablecimientosDepositos"
-            If EsFabrica = True Then NombreTablaRelEstablecimiento = "GWRRelEstablecimientosDepositos"
+            sqlQuery = "SELECT IdDepositos , Nombre , IdSucursales FROM " + NombreBase + ".dbo.Depositos e WHERE IdSucursales = " + SucursalId + " ORDER BY Nombre ASC "
 
-            If EsAdministrador Then
-                sqlQuery = "SELECT d.DepositoId, d.Descripcion FROM Depositos d"
-                If Not MostrarTodosDepositos Then
-                    sqlQuery += " JOIN " + NombreBaseEnsemble + ".dbo." + NombreTablaRelEstablecimiento + " red ON red.DepositoId = d.DepositoId "
-                    If EstablecimientoId <> "" Then
-                        sqlQuery += " WHERE red.EstablecimientoId = " + EstablecimientoId
-                    End If
-                End If
-            Else
-                sqlQuery = "SELECT d.DepositoId, d.Descripcion FROM Depositos d 
-                    JOIN RelUsuariosDepositos rud ON rud.DepositoId = d.DepositoId"
-
-                If Not MostrarTodosDepositos Then sqlQuery += " JOIN " + NombreBaseEnsemble + ".dbo." + NombreTablaRelEstablecimiento + " red ON red.DepositoId = rud.DepositoId"
-                sqlQuery += " WHERE rud.UsuarioId = '" + UsuarioId + "'"
-                If Not MostrarTodosDepositos Then sqlQuery += " AND red.EstablecimientoId = " + EstablecimientoId
-            End If
-
-            rs.Source = sqlQuery
-            Query.Add(rs.Source)
-            rs.Abrir()
-            If Not rs.EOF Then
-                Dim ListaRegistros As New List(Of Deposito)
-                Do While Not rs.EOF
-                    ListaRegistros.Add(New Deposito(rs("DepositoId").Valor, rs("Descripcion").Valor))
-                    rs.MoveNext()
+            myCmd = New SqlCommand(sqlQuery, myConn)
+            myReader = myCmd.ExecuteReader()
+            Dim ListaRegistros As New List(Of Deposito)
+            If myReader.HasRows Then
+                Do While myReader.Read()
+                    ListaRegistros.Add(New Deposito(myReader.GetValue(myReader.GetOrdinal("IdDepositos")), myReader.GetValue(myReader.GetOrdinal("Nombre"))))
                 Loop
-
-                respuesta.ConsultaExitosa = True
-                respuesta.rs = ListaRegistros
             Else
                 respuesta.mensaje = "El usuario no tiene depositos asociados"
             End If
-            rs.Cerrar()
+
+            respuesta.rs = ListaRegistros
+            respuesta.ConsultaExitosa = True
+            myReader.Close()
         Catch ex As Exception
             respuesta.mensaje = "Error BD consultando los depositos del usuario"
         End Try

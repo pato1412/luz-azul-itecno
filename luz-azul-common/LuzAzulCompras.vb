@@ -112,7 +112,7 @@
         Dim respuestaDepositos As New ResponseDeposito
 
         Try
-            respuestaDepositos = GetDepositosUsuario(UsuarioId, EstablecimientoId, False, EsAdministrador, False)
+            respuestaDepositos = GetDepositosUsuario(UsuarioId, "")
 
             If Not respuestaDepositos.ConsultaExitosa Then
                 respuesta.mensaje = "Error BD consultando los depositos del usuario"

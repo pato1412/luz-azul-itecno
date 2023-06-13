@@ -584,12 +584,12 @@
                 rs.Abrir()
                 If Not rs.EOF Then
                     Dim ListaRegistros As List(Of Establecimiento) = New List(Of Establecimiento)
-                    Do While Not rs.EOF
-                    ListaRegistros.Add(New Establecimiento(rs("EstablecimientoId").Valor, rs("Descripcion").Valor, EsPropio, ""))
+                Do While Not rs.EOF
+                    ListaRegistros.Add(New Establecimiento(rs("EstablecimientoId").Valor, rs("Descripcion").Valor, EsPropio, "", ""))
                     rs.MoveNext()
-                    Loop
+                Loop
 
-                    respuesta.rs = ListaRegistros
+                respuesta.rs = ListaRegistros
                     respuesta.ConsultaExitosa = True
                 Else
                     respuesta.mensaje = "El usuario no tiene establecimientos asociados"

@@ -120,11 +120,11 @@ Public Class MDIParent1
 
     Private Sub EnviarPedidosToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EnviarPedidosToolStripMenuItem.Click
         Try
-            'Dim ControladorPedidos As luz_azul_pedidos.Controlador
-            'ControladorPedidos = luz_azul_pedidos.Controlador.GetInstancia()
+            Dim ControladorPedidos As luz_azul_pedidos.Controlador
+            ControladorPedidos = luz_azul_pedidos.Controlador.GetInstancia()
 
             controlador.ClearLog()
-            'ControladorPedidos.ClearLog()
+            ControladorPedidos.ClearLog()
 
             'verifico que no este abierto el aplicativo de pedidos de una franquicia
             For Each frm As Form In Application.OpenForms
@@ -141,11 +141,11 @@ Public Class MDIParent1
                 Controlador.SetLogEvent("Mostrar Formulario MDI de Establecimientos")
 
                 'tengo un solo establecimiento por lo que no muestro el frm de estableciemientos
-                'luz_azul_pedidos.Controlador.SetCurrentEstablecimiento(controlador.GetCurrentEstablecimiento())
-                'luz_azul_pedidos.Controlador.SetMostrarTodosDepositos(Controlador.GetMostrarTodosDepositos())
+                luz_azul_pedidos.Controlador.SetCurrentEstablecimiento(controlador.GetCurrentEstablecimiento())
+                luz_azul_pedidos.Controlador.SetMostrarTodosDepositos(Controlador.GetMostrarTodosDepositos())
 
-                'Dim frmClasif = New luz_azul_pedidos.frmClasificaciones
-                'frmClasif.Show()
+                Dim frmClasif = New luz_azul_pedidos.frmClasificaciones
+                frmClasif.Show()
             Else
                 'Ocurrio un error al obtener el o los establecimientos
                 Controlador.WriteLogFile("Ocurrio un error al obtener el o los establecimientos")

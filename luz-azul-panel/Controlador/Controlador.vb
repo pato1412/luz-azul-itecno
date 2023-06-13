@@ -132,7 +132,7 @@ Public Class Controlador
     Public Function GetDepositosUsuario() As ResponseDeposito
         Dim respuestaDepositos As ResponseDeposito
 
-        respuestaDepositos = fachadaBD.GetDepositosUsuario(UsuarioId, CurrentEstablecimiento.EstablecimientoId, EsFabrica, EsAdministrador, MostrarTodosDepositos)
+        respuestaDepositos = fachadaBD.GetDepositosUsuario(UsuarioId, CurrentEstablecimiento.SucursalId)
 
         If (respuestaDepositos.ConsultaExitosa = False) Then
             ' Si ocurrio un error con el listado de depositos lo muestro en pantalla

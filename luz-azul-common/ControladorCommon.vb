@@ -10,7 +10,7 @@ Public Class ControladorCommon
     Public Shared CUIT As String = ""
     Public Shared EsAdministrador As Boolean = False
     Public Shared EsFabrica As Boolean = False
-    Public Shared CurrentEstablecimiento As Establecimiento = New Establecimiento("", "", False, "")
+    Public Shared CurrentEstablecimiento As Establecimiento = New Establecimiento("", "", False, "", "")
     Public Shared CurrentDepositos As New List(Of Deposito)
     Public Shared ListEstablecimientosDitribucion As New List(Of String)
 
