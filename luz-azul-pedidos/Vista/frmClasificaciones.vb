@@ -88,7 +88,8 @@ Public Class frmClasificaciones
 
     Private Sub frmClasificaciones_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         ' Verifico si puede utilizar la aplicacion siempre que no tenga deuda vencida
-        Dim montoVencido As Double = controlador.GetMontoVencido()
+        'Dim montoVencido As Double = controlador.GetMontoVencido()
+        Dim montoVencido As Double = 0
 
         If montoVencido > 0 Then
             Dim msgVariable As String = "POSEE DEUDA VENCIDA DE $ " & Format(montoVencido, "#0.00")

@@ -271,28 +271,13 @@ Public Class Controlador
                 Dim NombreClass As String = EmailClas.Descripcion
                 pos = ListProveedores.FindIndex(Function(element) element.DescripcionSinPrefijo = NombreClass)
                 If pos >= 0 Then
-
-                    'Existe una condicion especial que si el establecimiento es cabildo o bahia blanca debo reemplazar el email
-                    If CurrentEstablecimiento.EstablecimientoId = GlobalSettings.EstablecimientoIdBahiaBlanca Or CurrentEstablecimiento.EstablecimientoId = GlobalSettings.EstablecimientoIdCabildo Then
-                        If EmailClas.Email = GlobalSettings.EmailDepositoOlavarria Then
-                            Dim EmailReemplazo As EmailClasificacion = New EmailClasificacion(EmailClas.TipoContactoClienteId, EmailClas.Nombre, EmailClas.Descripcion, GlobalSettings.EmailReemplazo1)
-                            Dim EmailReemplazo2 As EmailClasificacion = New EmailClasificacion(EmailClas.TipoContactoClienteId, EmailClas.Nombre, EmailClas.Descripcion, GlobalSettings.EmailReemplazo2)
-                            ListProveedores(pos).ListEmails.Add(EmailReemplazo)
-                            ListProveedores(pos).ListEmails.Add(EmailReemplazo2)
-                        Else
-                            ListProveedores(pos).ListEmails.Add(EmailClas)
-                        End If
-                    Else
-                        ListProveedores(pos).ListEmails.Add(EmailClas)
-                    End If
-
+                    ListProveedores(pos).ListEmails.Add(EmailClas)
                 End If
             Next
         End If
 
         'Ordeno la lista de proveedores por descripcion en orden alfabetico
         ListProveedores = ListProveedores.OrderBy(Function(x) x.Descripcion).ToList()
-
 
         LogEvent.Add("Se han seleccionado " + ListProveedores.Count.ToString() + " Proveedores")
 
@@ -377,7 +362,7 @@ Public Class Controlador
                     ' Guardo en las configuracion global los proveedores hijos
 
                     For Each CurrEmail As String In ArrayEmails
-                        Dim EmailCliente As EmailClasificacion = New EmailClasificacion("Tipo Contacto", Clas.DescripcionSinPrefijo, Clas.DescripcionSinPrefijo, CurrEmail)
+                        Dim EmailCliente As EmailClasificacion = New EmailClasificacion(Clas.DescripcionSinPrefijo, Clas.DescripcionSinPrefijo, CurrEmail)
                         Clas.ListEmails.Add(EmailCliente)
                     Next
 
@@ -397,7 +382,7 @@ Public Class Controlador
             For Each Clas As Clasificacion In respuestaClasificacion.rs
                 If ListPadres.Contains(Clas.ClasificacionProdId) = False Then
                     For Each CurrEmail As String In ArrayEmails
-                        Dim EmailCliente As EmailClasificacion = New EmailClasificacion("Tipo Contacto", Clas.DescripcionSinPrefijo, Clas.DescripcionSinPrefijo, CurrEmail)
+                        Dim EmailCliente As EmailClasificacion = New EmailClasificacion(Clas.DescripcionSinPrefijo, Clas.DescripcionSinPrefijo, CurrEmail)
                         Clas.ListEmails.Add(EmailCliente)
                     Next
 

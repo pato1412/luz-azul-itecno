@@ -45,10 +45,10 @@ Public Class frmMain
         controlador.GenerarAgrupaciones()
         Application.DoEvents()
 
-        controlador.CargarProductosOpcionales()
+        'controlador.CargarProductosOpcionales()
         Application.DoEvents()
 
-        controlador.IniciarPedidoProveedores()
+        'controlador.IniciarPedidoProveedores()
         Application.DoEvents()
 
         'validarAgrupaciones()

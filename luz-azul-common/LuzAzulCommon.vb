@@ -231,12 +231,10 @@ Public Class LuzAzulCommon
     End Class
 
     Public Class EmailClasificacion
-        Public Property TipoContactoClienteId As String
         Public Property Nombre As String
         Public Property Descripcion As String
         Public Property Email As String
-        Public Sub New(ByVal TipoContactoCliente As String, NombreClasificacion As String, DescripcionClasificacion As String, EmailClasificacion As String)
-            TipoContactoClienteId = TipoContactoCliente
+        Public Sub New(NombreClasificacion As String, DescripcionClasificacion As String, EmailClasificacion As String)
             Nombre = NombreClasificacion
             Descripcion = DescripcionClasificacion
             Email = EmailClasificacion
@@ -866,30 +864,27 @@ Public Class LuzAzulCommon
 
         Return respuesta
     End Function
-    Public Function GetEmailsClasificaciones(ByVal ClienteId As String) As ResponseEmailClasificaciones
+    Public Function GetEmailsClasificaciones(ByVal EstablecimientoId As String) As ResponseEmailClasificaciones
         Dim respuesta As New ResponseEmailClasificaciones
 
         Try
-            rs.Source = "SELECT rcc.Nombre, rcc.Email, rcc.TipoContactoClienteId , tcc.Descripcion
-                FROM RelClientesContactos rcc
-                JOIN TiposContactosClientes tcc ON tcc.TipoContactoClienteId = rcc.TipoContactoClienteId
-                WHERE rcc.ClienteId = '" + ClienteId + "'"
+            Dim sqlQuery As String = "SELECT NombreProveedor, Descripcion, Email, EstablecimientoId
+            FROM " + NombreBaseEnsemble + ".[dbo].[ConfigEmailsProveedor] WHERE EstablecimientoId is null or EstablecimientoId = " + EstablecimientoId
 
-            Query.Add(rs.Source)
-            rs.Abrir()
-            If Not rs.EOF Then
+            Query.Add(sqlQuery)
+            myCmd = New SqlCommand(sqlQuery, myConn)
+            myReader = myCmd.ExecuteReader()
+            If myReader.HasRows Then
                 Dim ListaRegistros As List(Of EmailClasificacion) = New List(Of EmailClasificacion)
-                Do While Not rs.EOF
-                    ListaRegistros.Add(New EmailClasificacion(rs("TipoContactoClienteId").Valor, rs("Nombre").Valor, rs("Descripcion").Valor, rs("Email").Valor))
-                    rs.MoveNext()
+                Do While myReader.Read()
+                    ListaRegistros.Add(New EmailClasificacion(myReader.GetValue(myReader.GetOrdinal("Descripcion")), myReader.GetValue(myReader.GetOrdinal("NombreProveedor")), myReader.GetValue(myReader.GetOrdinal("Email"))))
                 Loop
-
-                respuesta.ConsultaExitosa = True
                 respuesta.rs = ListaRegistros
+                respuesta.ConsultaExitosa = True
             Else
-                respuesta.mensaje = "El cliente no tiene asociados contactos"
+                respuesta.mensaje = "La configuracion de email de proveedores no es correcta"
             End If
-            rs.Cerrar()
+            myReader.Close()
         Catch ex As Exception
             respuesta.mensaje = "Error al establecer la conexion con la base de datos"
         End Try
@@ -906,17 +901,16 @@ Public Class LuzAzulCommon
 
             myCmd = New SqlCommand(sqlQuery, myConn)
             myReader = myCmd.ExecuteReader()
-            Dim ListaRegistros As New List(Of Deposito)
             If myReader.HasRows Then
+                Dim ListaRegistros As New List(Of Deposito)
                 Do While myReader.Read()
                     ListaRegistros.Add(New Deposito(myReader.GetValue(myReader.GetOrdinal("IdDepositos")), myReader.GetValue(myReader.GetOrdinal("Nombre"))))
                 Loop
+                respuesta.rs = ListaRegistros
+                respuesta.ConsultaExitosa = True
             Else
                 respuesta.mensaje = "El usuario no tiene depositos asociados"
             End If
-
-            respuesta.rs = ListaRegistros
-            respuesta.ConsultaExitosa = True
             myReader.Close()
         Catch ex As Exception
             respuesta.mensaje = "Error BD consultando los depositos del usuario"

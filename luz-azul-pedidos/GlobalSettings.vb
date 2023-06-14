@@ -11,12 +11,6 @@ Public Class GlobalSettings
     Public Shared NombreClasificacionProductosOpcionales As String = "AC Productos Opcionales"
     Public Shared CUITEnsemble As String = "30712110429"
 
-    Public Shared EstablecimientoIdCabildo As String = "16"
-    Public Shared EstablecimientoIdBahiaBlanca As String = "17"
-
-    Public Shared EmailDepositoOlavarria As String = "depositoolavarria@luz-azul.com.ar"
-    Public Shared EmailReemplazo1 As String = "expedicionbarracas@luz-azul.com.ar"
-    Public Shared EmailReemplazo2 As String = "pedidosbarracas@luz-azul.com.ar"
     Public Shared DefaulColorAgrupacion As String = "#30,34,255"
 
     'Para validar la columna Cantidad Pedida en la grilla necesito saber el indice
